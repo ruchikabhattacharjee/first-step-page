@@ -3,14 +3,20 @@
 import { readdirSync, lstatSync, realpathSync, rmSync, cpSync, existsSync } from "node:fs";
 import { join } from "node:path";
 
-const dir = join(process.cwd(), process.env.NEXT_DIST_DIR || "dist", "node_modules");
-if (existsSync(dir)) {
+function deref(dir) {
   for (const entry of readdirSync(dir)) {
     const p = join(dir, entry);
-    if (!lstatSync(p).isSymbolicLink()) continue;
-    const target = realpathSync(p);
-    rmSync(p);
-    cpSync(target, p, { recursive: true, dereference: true });
-    console.log(`dereferenced ${entry}`);
+    const st = lstatSync(p);
+    if (st.isSymbolicLink()) {
+      const target = realpathSync(p);
+      rmSync(p);
+      cpSync(target, p, { recursive: true, dereference: true });
+      console.log(`dereferenced ${p}`);
+    } else if (st.isDirectory()) {
+      deref(p);
+    }
   }
 }
+
+const root = join(process.cwd(), process.env.NEXT_DIST_DIR || "dist");
+if (existsSync(root)) deref(root);
