@@ -1,0 +1,46 @@
+.onboarding-container {
+  width: 100%;
+  max-width: 520px;
+  padding: 3rem 2.5rem;
+  box-shadow: var(--shadow-lg);
+}
+
+.bank-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 1rem;
+}
+
+.bank-card {
+  padding: 1.5rem;
+  text-align: center;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid var(--surface-border);
+  background: var(--surface-color);
+  color: var(--text-primary);
+  transition: all var(--transition-fast);
+}
+
+.bank-card:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+}
+
+.modal-content {
+  width: 100%;
+  max-width: 400px;
+  padding: 2rem;
+  box-shadow: var(--shadow-glass);
+}

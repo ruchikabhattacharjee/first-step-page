@@ -1,0 +1,138 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id             String   @id @default(cuid())
+  name           String
+  businessName   String
+  email          String   @unique
+  passwordHash   String
+  industry       String
+  country        String   @default("India")
+  currency       String   @default("INR")
+  fyStartMonth   Int      @default(4) // April by default
+  bankBalance    Float    @default(0) // Day-zero init balance
+  openingReceivables Float @default(0)
+  openingPayables    Float @default(0)
+  setupComplete  Boolean  @default(false)
+  role           String   @default("Admin") // Admin, Accountant, Viewer
+  isVerified     Boolean  @default(false)
+  createdAt      DateTime @default(now())
+
+  // Team scope: invited members point at the owner's account via businessId.
+  // When null, the user IS their own business. The "tenant" id (see tenantOf())
+  // is businessId ?? id, and ALL business records are scoped to that tenant.
+  businessId     String?
+
+  // A business owner owns all of their business records.
+  contacts     Contact[]
+  invoices     Invoice[]
+  bills        Bill[]
+  transactions Transaction[]
+  budgets      Budget[]
+}
+
+model OtpToken {
+  id        String   @id @default(cuid())
+  email     String
+  otp       String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+model Contact {
+  id        String   @id @default(cuid())
+  ownerId   String
+  owner     User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  name      String
+  type      String   // "CUSTOMER", "VENDOR", "BOTH"
+  email     String?
+  phone     String?
+  createdAt DateTime @default(now())
+  invoices  Invoice[]
+  bills     Bill[]
+
+  @@index([ownerId])
+}
+
+model Invoice {
+  id            String    @id @default(cuid())
+  ownerId       String
+  owner         User      @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  invoiceNumber String
+  customerId    String
+  customer      Contact   @relation(fields: [customerId], references: [id])
+  issueDate     DateTime
+  dueDate       DateTime
+  state         String    // "DRAFT", "SENT", "OVERDUE", "PAID"
+  items         String    // Storing as JSON string: [{desc, qty, unitPrice, taxRate}]
+  totalAmount   Float
+  paidDate      DateTime?
+  createdAt     DateTime  @default(now())
+  transactions  Transaction[]
+
+  @@unique([ownerId, invoiceNumber])
+  @@index([ownerId])
+}
+
+model Bill {
+  id            String    @id @default(cuid())
+  ownerId       String
+  owner         User      @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  billNumber    String
+  vendorId      String
+  vendor        Contact   @relation(fields: [vendorId], references: [id])
+  billDate      DateTime
+  dueDate       DateTime
+  category      String    // "Rent", "Utilities", "Salaries", "Raw Materials", "Marketing", "Software", "Other"
+  state         String    // "DRAFT", "PENDING", "OVERDUE", "PAID"
+  items         String    // Storing as JSON string
+  totalAmount   Float
+  paidDate      DateTime?
+  createdAt     DateTime  @default(now())
+  transactions  Transaction[]
+
+  @@index([ownerId])
+}
+
+model Transaction {
+  id            String    @id @default(cuid())
+  ownerId       String
+  owner         User      @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  date          DateTime
+  amount        Float
+  description   String
+  type          String    // "IN", "OUT"
+  category      String?
+  tag           String    // "OPERATING", "INVESTING", "FINANCING"
+
+  invoiceId     String?
+  invoice       Invoice?  @relation(fields: [invoiceId], references: [id])
+
+  billId        String?
+  bill          Bill?     @relation(fields: [billId], references: [id])
+
+  createdAt     DateTime  @default(now())
+
+  @@index([ownerId])
+  @@index([ownerId, date])
+}
+
+model Budget {
+  id        String   @id @default(cuid())
+  ownerId   String
+  owner     User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  month     Int
+  year      Int
+  category  String
+  amount    Float
+
+  @@unique([ownerId, year, month, category])
+  @@index([ownerId])
+}

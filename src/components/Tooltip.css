@@ -1,0 +1,36 @@
+.tooltip-container {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-left: 0.5rem;
+  cursor: help;
+  outline: none;
+}
+
+.tooltip-icon {
+  transition: color var(--transition-fast);
+}
+
+.tooltip-container:hover .tooltip-icon,
+.tooltip-container:focus .tooltip-icon {
+  color: var(--primary);
+}
+
+/* Rendered in a body-level portal at fixed coordinates (see Tooltip.tsx). */
+.tooltip-floating {
+  position: fixed;
+  z-index: 2000;
+  transform: translateY(-100%);
+  padding: 0.7rem 0.9rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--text-primary);
+  text-align: left;
+  background: var(--surface-solid);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-lg);
+  pointer-events: none;
+  animation: fadeIn var(--transition-fast) forwards;
+}

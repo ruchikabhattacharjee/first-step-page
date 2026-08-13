@@ -1,0 +1,66 @@
+.profile-container {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-hero {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.profile-avatar {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: var(--brand-gradient);
+  color: white;
+  font-size: 1.8rem;
+  font-weight: 800;
+  box-shadow: var(--glow-primary);
+  flex-shrink: 0;
+}
+
+.profile-form {
+  padding: 2rem;
+}
+
+.profile-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+}
+
+.form-group { display: flex; flex-direction: column; }
+
+@media (max-width: 720px) {
+  .profile-grid { grid-template-columns: 1fr; }
+  .profile-hero { flex-direction: column; text-align: center; }
+}
+
+/* ---- Team table ---- */
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table th, .data-table td { padding: 0.8rem 0.75rem; text-align: left; border-bottom: 1px solid var(--surface-border); }
+.data-table th { color: var(--text-secondary); font-weight: 600; font-size: 0.78rem; text-transform: uppercase; }
+.data-table tr:last-child td { border-bottom: none; }
+
+.member-avatar {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--brand-gradient); color: #fff; font-size: 0.72rem; font-weight: 700;
+}
+.role-select { width: auto; min-width: 130px; padding: 0.4rem 0.6rem; }
+
+.action-btn { background: none; border: none; color: var(--text-secondary); cursor: pointer; transition: color var(--transition-fast); }
+.action-btn:hover { color: var(--primary); }
+.action-btn.text-danger:hover { color: var(--danger); }
+
+.cred-box {
+  display: flex; align-items: center; gap: 1rem;
+  padding: 1rem; border-radius: var(--radius-md);
+  background: var(--primary-light); border: 1px dashed var(--primary);
+}

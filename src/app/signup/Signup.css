@@ -1,0 +1,45 @@
+.signup-container {
+  width: 100%;
+  max-width: 480px;
+  padding: 3rem 2.5rem;
+  box-shadow: var(--shadow-lg);
+}
+
+.signup-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.signup-header h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.w-full {
+  width: 100%;
+}
+
+.mt-2 { margin-top: 0.5rem; }
+.mt-3 { margin-top: 0.75rem; }
+.mt-4 { margin-top: 1rem; }
+.mb-6 { margin-bottom: 1.5rem; }
+.text-center { text-align: center; }

@@ -1,0 +1,78 @@
+.bills-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.kpi-banner {
+  display: flex;
+  justify-content: space-between;
+  padding: 1.5rem 2.5rem;
+}
+
+.kpi-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.bills-list-wrapper {
+  padding: 1.5rem;
+}
+
+.actions-group {
+  display: flex;
+  gap: 1rem;
+}
+
+.category-pill {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+  background: var(--surface-border);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-table th, .data-table td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--surface-border);
+}
+
+.data-table th {
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+}
+
+.data-table tr:hover {
+  background: var(--surface-color);
+}
+
+.actions-cell {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.action-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: color var(--transition-fast);
+}
+
+.action-btn:hover {
+  color: var(--primary);
+}
+
+.flex-1 { flex: 1; }
+.gap-4 { gap: 1rem; }

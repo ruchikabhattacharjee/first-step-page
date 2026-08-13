@@ -1,0 +1,143 @@
+.header {
+  position: relative;
+  z-index: 30; /* keep the header (and its profile dropdown) above page content */
+  min-height: var(--header-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1rem 1.75rem;
+  margin: 1.5rem 2rem 1.75rem 2rem;
+  border-radius: var(--radius-lg);
+}
+
+.header-greeting {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.header-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.header-business {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.header-kpi-container {
+  display: flex;
+  gap: 3rem;
+  align-items: center;
+  margin-left: auto;
+  padding-right: 1.5rem;
+  border-right: 1px solid var(--surface-border);
+}
+
+.kpi-item { display: flex; flex-direction: column; }
+
+.kpi-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.kpi-value { margin-top: 0.2rem; font-weight: 700; }
+
+/* Bank balance hidden from Viewer-role users: blurred, with a restricted tag. */
+.balance-hidden { position: relative; display: inline-flex; align-items: center; cursor: default; }
+.balance-amount { filter: blur(9px); user-select: none; pointer-events: none; }
+.balance-lock {
+  position: absolute;
+  inset: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.header-actions { position: relative; display: flex; align-items: center; }
+
+.profile-trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: var(--radius-full);
+  transition: background var(--transition-fast);
+}
+.profile-trigger:hover { background: var(--primary-light); }
+
+.user-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--brand-gradient);
+  color: white;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  box-shadow: var(--glow-primary);
+  flex-shrink: 0;
+}
+
+.profile-menu {
+  position: absolute;
+  top: calc(100% + 0.75rem);
+  right: 0;
+  width: 240px;
+  padding: 0.5rem;
+  z-index: 200;
+  /* Opaque (not glass) so content behind never bleeds through the menu. */
+  background: var(--surface-solid);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  box-shadow: var(--shadow-lg);
+}
+
+.profile-menu-head {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  margin-bottom: 0.25rem;
+  border-bottom: 1px solid var(--surface-border);
+}
+.profile-menu-head .user-avatar { width: 38px; height: 38px; font-size: 0.85rem; }
+
+.profile-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  padding: 0.7rem 0.75rem;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-align: left;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+.profile-menu-item:hover { background: var(--primary-light); color: var(--primary); }
+.profile-menu-item--danger:hover { background: var(--danger-bg); color: var(--danger); }
+
+@media (max-width: 900px) {
+  .header-kpi-container { display: none; }
+}
