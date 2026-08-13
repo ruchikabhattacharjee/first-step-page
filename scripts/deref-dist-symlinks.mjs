@@ -42,6 +42,12 @@ if (!existsSync(root)) {
 
 prepare(root);
 
+// Build diagnostics and caches are not used by the production server and only
+// add noise to the uploaded artifact.
+for (const disposable of ["cache", "trace", "trace-build"]) {
+  rmSync(join(root, disposable), { recursive: true, force: true });
+}
+
 // The build runs on glibc Linux. pdf-parse includes an additional musl canvas
 // binary that cannot load on this target and adds roughly 28 MB to the archive.
 for (const packageDir of readdirSync(join(root, "node_modules"))) {
