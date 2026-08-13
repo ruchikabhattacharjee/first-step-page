@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build:dev": "next build",
+    "build:dev": "NEXT_DIST_DIR=dist next build",
     "start": "next start",
     "lint": "eslint",
     "gen:samples": "tsx scripts/generate-sample-docs.ts"
