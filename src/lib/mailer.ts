@@ -53,7 +53,17 @@ export async function getTransporter(): Promise<Transporter> {
  * (e.g. SMTP blocked on this network) rather than actually delivering. Throws
  * only in production so failures surface there.
  */
+export function isMailConfigured(): boolean {
+  return Boolean(process.env.SMTP_USER && process.env.SMTP_PASS);
+}
+
 export async function sendMail(opts: { to: string; subject: string; text: string; html: string }): Promise<{ sent: boolean }> {
+  // No SMTP credentials on this deployment: never throw, just report that the
+  // mail could not be delivered so callers can degrade gracefully.
+  if (!isMailConfigured()) {
+    console.warn(`[mailer] SMTP is not configured — skipped email to ${opts.to} (${opts.subject})`);
+    return { sent: false };
+  }
   try {
     const transporter = await getTransporter();
     await transporter.sendMail({ from: `"CashFlow Pro" <${process.env.SMTP_USER}>`, ...opts });
@@ -68,7 +78,7 @@ export async function sendMail(opts: { to: string; subject: string; text: string
   }
 }
 
-export async function sendOtpEmail(to: string, otp: string): Promise<void> {
+export async function sendOtpEmail(to: string, otp: string): Promise<{ sent: boolean }> {
   const { sent } = await sendMail({
     to,
     subject: 'Verify your CashFlow Pro account',
@@ -78,6 +88,7 @@ export async function sendOtpEmail(to: string, otp: string): Promise<void> {
   if (!sent && process.env.NODE_ENV !== 'production') {
     console.warn(`[mailer] DEV FALLBACK — OTP for ${to} is: ${otp}`);
   }
+  return { sent };
 }
 
 /** A payment-reminder email for an outstanding invoice. */

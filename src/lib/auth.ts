@@ -1,5 +1,6 @@
 import { cookies } from 'next/headers';
 import jwt from 'jsonwebtoken';
+import { jwtSecret } from './session';
 import { prisma } from './prisma';
 
 export type CurrentUser = NonNullable<Awaited<ReturnType<typeof getCurrentUser>>>;
@@ -22,7 +23,7 @@ export async function getCurrentUser() {
   if (!token) return null;
 
   try {
-    const payload = jwt.verify(token, process.env.JWT_SECRET || 'secret') as { userId: string };
+    const payload = jwt.verify(token, jwtSecret()) as { userId: string };
     return await prisma.user.findUnique({ where: { id: payload.userId } });
   } catch {
     return null;

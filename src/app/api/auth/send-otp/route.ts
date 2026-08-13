@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import { randomBytes } from 'crypto';
 import { prisma } from '@/lib/prisma';
-import { sendOtpEmail } from '@/lib/mailer';
+import { sendOtpEmail, isMailConfigured } from '@/lib/mailer';
 
 export async function POST(req: NextRequest) {
   try {
@@ -77,10 +77,21 @@ export async function POST(req: NextRequest) {
 
     // Invalidate any earlier codes for this email, then store the new one.
     await prisma.otpToken.deleteMany({ where: { email } });
-    await prisma.otpToken.create({ data: { email, otp, expiresAt } });
+    await prisma.otpToken.create({ data: { email, otp, expiresAt, purpose: 'SIGNUP' } });
 
     // Send the OTP email (forced over IPv4 — see src/lib/mailer.ts).
-    await sendOtpEmail(email, otp);
+    const { sent } = await sendOtpEmail(email, otp);
+
+    // When this deployment has no SMTP credentials the signup flow would be a
+    // dead end, so hand the code back to the person creating the account.
+    if (!sent && !isMailConfigured()) {
+      return NextResponse.json({
+        success: true,
+        emailUnavailable: true,
+        devOtp: otp,
+        message: 'Email delivery is not configured on this deployment. Use the code shown to continue.',
+      });
+    }
 
     return NextResponse.json({ success: true, message: 'OTP sent successfully' });
   } catch (error: any) {

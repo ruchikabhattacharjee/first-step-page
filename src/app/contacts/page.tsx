@@ -1,3 +1,4 @@
+import { redirect } from 'next/navigation';
 import ContactsClient from './ContactsClient';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser, tenantOf } from '@/lib/auth';
@@ -5,7 +6,7 @@ import { canWrite } from '@/lib/rbac';
 
 export default async function ContactsPage() {
   const user = await getCurrentUser();
-  if (!user) return null;
+  if (!user) redirect('/login');
   const ownerId = tenantOf(user);
 
   const contacts = await prisma.contact.findMany({
