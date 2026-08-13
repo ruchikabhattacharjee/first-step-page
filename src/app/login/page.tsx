@@ -32,9 +32,8 @@ export default function LoginPage() {
       const data = await res.json();
       
       if (res.ok) {
-        // Refresh router so middleware picks up the cookie
-        router.push('/');
-        router.refresh();
+        // Full navigation so the proxy re-reads the fresh auth cookie.
+        window.location.assign('/');
       } else {
         setError(data.error || 'Login failed');
         if (data.unverified) {

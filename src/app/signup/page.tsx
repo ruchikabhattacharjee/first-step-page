@@ -24,6 +24,7 @@ export default function SignupPage() {
     teamInvites: [] as {email: string, role: string}[]
   });
   const [otp, setOtp] = useState('');
+  const [notice, setNotice] = useState('');
 
   const handleNext = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,6 +49,9 @@ export default function SignupPage() {
       const data = await res.json();
       
       if (res.ok) {
+        setNotice(data.emailUnavailable && data.devOtp
+          ? `Email delivery isn't configured on this deployment. Your verification code is ${data.devOtp}.`
+          : '');
         setStep(2);
       } else {
         setError(data.error || 'Failed to send OTP');
@@ -92,6 +96,7 @@ export default function SignupPage() {
       </div>
 
       {error && <div className="alert-error mb-4">{error}</div>}
+      {step === 2 && notice && <div className="alert-error mb-4">{notice}</div>}
 
       {step === 1 ? (
         <form onSubmit={handleNext} className="signup-form animate-fade-in">

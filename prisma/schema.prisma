@@ -42,6 +42,7 @@ model OtpToken {
   id        String   @id @default(cuid())
   email     String
   otp       String
+  purpose   String   @default("SIGNUP") // "SIGNUP" | "RESET"
   expiresAt DateTime
   createdAt DateTime @default(now())
 }

@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
     const expiresAt = new Date(Date.now() + 10 * 60000); // 10 minutes
 
     await prisma.otpToken.deleteMany({ where: { email } });
-    await prisma.otpToken.create({ data: { email, otp, expiresAt } });
+    await prisma.otpToken.create({ data: { email, otp, expiresAt, purpose: 'RESET' } });
 
     const { sent } = await sendMail({
       to: email,

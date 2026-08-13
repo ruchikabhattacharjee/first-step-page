@@ -1,3 +1,4 @@
+import { redirect } from 'next/navigation';
 import InvoicesClient from './InvoicesClient';
 import { prisma } from '@/lib/prisma';
 import { getCurrentUser, tenantOf } from '@/lib/auth';
@@ -6,7 +7,7 @@ import { canWrite } from '@/lib/rbac';
 
 export default async function InvoicesPage() {
   const user = await getCurrentUser();
-  if (!user) return null;
+  if (!user) redirect('/login');
   const ownerId = tenantOf(user);
 
   const [rawInvoices, customers] = await Promise.all([

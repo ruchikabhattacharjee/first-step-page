@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "build:dev": "NEXT_DIST_DIR=dist next build && node scripts/deref-dist-symlinks.mjs",
+    "db:init": "node scripts/init-db.mjs",
+    "build": "prisma generate && node scripts/init-db.mjs && next build",
+    "build:dev": "prisma generate && node scripts/init-db.mjs && NEXT_DIST_DIR=dist next build && node scripts/deref-dist-symlinks.mjs",
     "start": "next start",
     "lint": "eslint",
     "gen:samples": "tsx scripts/generate-sample-docs.ts"

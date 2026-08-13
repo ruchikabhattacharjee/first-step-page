@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
   }
 
   const tokenRecord = await prisma.otpToken.findFirst({
-    where: { email, otp: String(otp) },
+    where: { email, otp: String(otp), purpose: 'RESET' },
     orderBy: { createdAt: 'desc' },
   });
   if (!tokenRecord) return NextResponse.json({ error: 'Invalid code' }, { status: 400 });

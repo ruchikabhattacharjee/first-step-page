@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import jwt from 'jsonwebtoken';
 import { prisma } from '@/lib/prisma';
+import { signSession, sessionCookie } from '@/lib/session';
 
 export async function POST(req: NextRequest) {
   try {
@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
     }
 
     const tokenRecord = await prisma.otpToken.findFirst({
-      where: { email, otp },
+      where: { email, otp, purpose: 'SIGNUP' },
       orderBy: { createdAt: 'desc' }
     });
 
@@ -33,10 +33,8 @@ export async function POST(req: NextRequest) {
     await prisma.otpToken.deleteMany({ where: { email } });
 
     // Generate JWT and set cookie
-    const token = jwt.sign({ userId: user.id, email: user.email, role: user.role }, process.env.JWT_SECRET || 'secret', { expiresIn: '7d' });
-    
-    const secure = process.env.NODE_ENV === 'production' ? '; Secure' : '';
-    const cookieString = `auth_token=${token}; HttpOnly; Path=/; Max-Age=${60 * 60 * 24 * 7}; SameSite=Strict${secure}`;
+    const token = signSession({ userId: user.id, email: user.email, role: user.role });
+    const cookieString = sessionCookie(token);
 
     const response = NextResponse.json({ success: true });
     response.headers.set('Set-Cookie', cookieString);

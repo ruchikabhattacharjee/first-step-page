@@ -1,10 +1,11 @@
+import { redirect } from 'next/navigation';
 import AnalyticsClient from './AnalyticsClient';
 import { getCurrentUser, tenantOf } from '@/lib/auth';
 import { cashFlowStatement, budgetVsActuals, forecast } from '@/lib/analytics';
 
 export default async function AnalyticsPage() {
   const user = await getCurrentUser();
-  if (!user) return null;
+  if (!user) redirect('/login');
   const ownerId = tenantOf(user);
 
   const now = new Date();
